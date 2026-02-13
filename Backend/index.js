@@ -2,22 +2,22 @@
 import express from 'express';
 import cors from 'cors';
 import paymentRoutes from './routes/paymentRoutes.js';
-import bodyParser from 'body-parser';
 
 const app = express();
 const PORT = 5400;
 
-// Middleware
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// Enable CORS for Vue frontend port (default Vite: 5173)
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET','POST']
+}));
 
-// Routes
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use('/api', paymentRoutes);
 
 app.get('/', (req,res) => res.send('Server is running'));
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
