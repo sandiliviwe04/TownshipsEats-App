@@ -1,23 +1,27 @@
-// index.js
-import express from 'express';
-import cors from 'cors';
-import paymentRoutes from './routes/paymentRoutes.js';
+import express from "express";
+import dotenv from "dotenv";
+import paymentRoutes from "./routes/paymentRoutes.js";
+import cors from "cors";
+
+dotenv.config();
 
 const app = express();
-const PORT = 5400;
 
-// Enable CORS for Vue frontend port (default Vite: 5173)
-app.use(cors({
-  origin: 'http://localhost:5173',
-  methods: ['GET','POST']
-}));
-
+// Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api', paymentRoutes);
+// Routes
+app.use("/api", paymentRoutes);
 
-app.get('/', (req,res) => res.send('Server is running'));
+// Basic route
+app.get("/", (req, res) => {
+  res.json({ message: "TownshipsEats API is running" });
+});
 
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
-
+const PORT = process.env.PORT || 5401;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`PayFast Sandbox: ${process.env.PAYFAST_SANDBOX === 'true' ? 'YES' : 'NO'}`);
+});

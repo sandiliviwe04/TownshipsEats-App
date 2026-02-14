@@ -1,24 +1,27 @@
-const pf = import('../models/PayfastModel');
-
 export const handleITN = async (req, res) => {
-  const itnData = req.body;
-  try {
-    // ITN requires security checks like validating the signature and source IP
-    // The node-payfast library should have utilities for this. Refer to its documentation.
-
-    // Example verification (adjust based on actual library methods):
-    const isValid = pf.validateITN(itnData); 
-
-    if (isValid) {
-      // Update your database with the payment status, e.g., mark order as paid
-      console.log('ITN valid. Payment status:', itnData.payment_status);
-      res.status(200).send('ITN processed');
-    } else {
-      console.error('ITN invalid signature');
-      res.status(400).send('Invalid ITN');
+  console.log("========== ITN RECEIVED ==========");
+  console.log("Body:", JSON.stringify(req.body, null, 2));
+  console.log("==================================");
+  
+  // Set the ngrok-skip-browser-warning header
+  res.setHeader('ngrok-skip-browser-warning', 'true');
+  
+  // Always respond with 200 to acknowledge receipt
+  res.status(200).send("ITN received");
+  
+  // Process the payment asynchronously
+  setTimeout(() => {
+    try {
+      const paymentData = req.body;
+      
+      if (paymentData.payment_status === 'COMPLETE') {
+        console.log(`✅ Payment ${paymentData.m_payment_id || 'unknown'} was successful`);
+        // TODO: Update your database here
+      } else {
+        console.log(`Payment status: ${paymentData.payment_status}`);
+      }
+    } catch (error) {
+      console.error("Error processing ITN:", error);
     }
-  } catch (error) {
-    console.error('ITN error:', error);
-    res.status(500).send('ITN handling failed');
-  }
+  }, 0);
 };
