@@ -39,8 +39,8 @@ export const createPayment = async (req, res) => {
     const paymentObject = payfastClient.createPaymentObject(paymentData, signature);
 
     const urlToSend = payfastClient.getPayfastUrl();
-    console.log('🔍 URL being sent to frontend:', urlToSend);
-    console.log('🔍 Sandbox value when sending:', payfastClient.sandbox);
+    console.log('URL being sent to frontend:', urlToSend);
+    console.log('Sandbox value when sending:', payfastClient.sandbox);
 
     // Return data for frontend to create form
     return res.json({ 

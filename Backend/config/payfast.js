@@ -4,14 +4,14 @@ import { PayFast } from 'node-payfast';
 
 dotenv.config();
 
-console.log('🔍 ENV CHECK in payfast.js:', {
+console.log(' ENV CHECK in payfast.js:', {
   sandboxEnv: process.env.PAYFAST_SANDBOX,
   merchantId: process.env.PAYFAST_MERCHANT_ID,
   passphraseSet: !!process.env.PAYFAST_PASSPHRASE
 });
 
 // Initialize PayFast instance
-// Initialize PayFast instance
+
 const payfastClient = new PayFast({
   sandbox: true,  // FORCE it to true for testing
   merchant_id: process.env.PAYFAST_MERCHANT_ID,
@@ -27,7 +27,7 @@ payfastClient.getPayfastUrl = function() {
     ? 'https://sandbox.payfast.co.za/eng/process'
     : 'https://www.payfast.co.za/eng/process';
   
-  console.log('🔍 getPayfastUrl() called - sandbox:', this.sandbox, 'returning:', url);
+  console.log(' getPayfastUrl() called - sandbox:', this.sandbox, 'returning:', url);
   return url;
 };
 
