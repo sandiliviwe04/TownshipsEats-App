@@ -1,14 +1,11 @@
-import './assets/main.css'
+// Frontend/src/main.js
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router'; // Import your router
+import './assets/css/main.css'; // Import your global CSS
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+const app = createApp(App);
 
-import App from './App.vue'
-import router from './router'
+app.use(router); // Use the router
 
-const app = createApp(App)
-
-app.use(createPinia())
-app.use(router)
-
-app.mount('#app')
+app.mount('#app');
