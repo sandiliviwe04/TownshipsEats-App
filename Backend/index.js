@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import cors from "cors";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+app.use("/api/auth", authRoutes)
 app.use("/api", paymentRoutes);
 
 // Basic route

@@ -44,6 +44,7 @@
             <span>R{{ total.toFixed(2) }}</span>
           </div>
           <PrimaryButton text="Proceed to Checkout" type="success" :fullWidth="true" class="mt-20" @click="checkout" />
+          <RouterLink to="/payment" class="mt-20">Go to Payment Page</RouterLink>
         </div>
       </div>
     </div>
@@ -52,8 +53,12 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { RouterLink } from 'vue-router';
-import PrimaryButton from '../../components/Shared/PrimaryButton.vue'; // Import PrimaryButton
+import { RouterLink, useRouter } from 'vue-router';
+import PrimaryButton from '../../components/Shared/PrimaryButton.vue';
+import payment from '../payment.vue'; // Import PrimaryButton
+import Payment from '../payment.vue';
+
+const router = useRouter();
 
 const cartItems = ref([
   { id: 1, name: 'Kota Special', restaurant: 'Kasi Flavours', price: 60.00, quantity: 1, image: 'https://via.placeholder.com/50/ff7f00/ffffff?text=Kota' },

@@ -7,6 +7,9 @@
         <p>Login to your account</p>
       </div>
 
+      <div v-if="error" class="error-message">{{ error }}</div>
+      <div v-if="success" class="success-message">{{ success }}</div>
+
       <form @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="email">Email:</label>
@@ -24,7 +27,13 @@
             <option value="driver">Driver</option>
           </select>
         </div>
-        <PrimaryButton text="Login" type="primary" :fullWidth="true" class="mt-20" />
+        <PrimaryButton 
+          :text="loading ? 'Logging in...' : 'Login'" 
+          type="primary" 
+          :fullWidth="true" 
+          class="mt-20" 
+          :disabled="loading"
+        />
       </form>
 
       <p class="text-center mt-20">
@@ -37,31 +46,52 @@
 <script setup>
 import { ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
-import PrimaryButton from '../../components/Shared/PrimaryButton.vue'; // Import our new button component
+import PrimaryButton from '../../components/Shared/PrimaryButton.vue';
+import axios from 'axios';
 
 const email = ref('');
 const password = ref('');
-const selectedRole = ref('customer'); // Default to customer login
+const selectedRole = ref('customer');
+const loading = ref(false);
+const error = ref('');
+const success = ref('');
 const router = useRouter();
 
-const handleLogin = () => {
-  // --- TEMPORARY CLIENT-SIDE LOGIN LOGIC ---
-  if (
-    (selectedRole.value === 'customer' && email.value === 'customer@example.com' && password.value === 'password123') ||
-    (selectedRole.value === 'vendor' && email.value === 'vendor@example.com' && password.value === 'password123') ||
-    (selectedRole.value === 'driver' && email.value === 'driver@example.com' && password.value === 'password123')
-  ) {
-    alert(`Login successful as ${selectedRole.value}! Redirecting...`);
-    window.loginAs(selectedRole.value); // Use the global function to set role and redirect
-  } else {
-    alert('Invalid credentials or role. Try: customer/vendor/driver@example.com / password123');
+const handleLogin = async () => {
+  error.value = '';
+  success.value = '';
+  loading.value = true;
+
+  try {
+    const response = await axios.post('http://localhost:5401/api/auth/login', {
+      email: email.value,
+      password: password.value,
+      role: selectedRole.value
+    });
+
+    if (response.data.success) {
+      const userData = response.data.data;
+      
+      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('token', userData.token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
+      
+      success.value = 'Login successful! Redirecting...';
+      
+      setTimeout(() => {
+        window.loginAs(selectedRole.value);
+      }, 1000);
+    }
+  } catch (err) {
+    console.error('Login error:', err);
+    error.value = err.response?.data?.error || 'Login failed. Please check your credentials.';
+  } finally {
+    loading.value = false;
   }
-  // --- END TEMPORARY LOGIC ---
 };
 </script>
 
 <style scoped>
-/* Keep existing styles, removed the generic button style if it was there */
 .login-page {
   display: flex;
   justify-content: center;
@@ -101,5 +131,25 @@ const handleLogin = () => {
 
 .mt-20 {
   margin-top: 20px;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-align: center;
+  border: 1px solid #ef9a9a;
+}
+
+.success-message {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-align: center;
+  border: 1px solid #a5d6a7;
 }
 </style>
