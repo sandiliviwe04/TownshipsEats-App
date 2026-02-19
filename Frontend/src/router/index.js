@@ -25,7 +25,7 @@ import VendorReportsPage from '../views/Vendor/VendorReportsPage.vue'; // NEW
 
 // --- Driver Pages ---
 import DriverDashboardPage from '../views/Driver/DriverDashboardPage.vue';
-
+import payment from  '../views/payment.vue';
 // --- Static Pages ---
 import AboutUsPage from '../views/Static/AboutUsPage.vue';
 import ContactPage from '../views/Static/ContactPage.vue';
@@ -48,6 +48,11 @@ const router = createRouter({
       component: RegistrationPage,
     },
     // --- Customer Routes ---
+    {
+path: '/payment',
+name: 'Payment',
+component: payment,
+    },
     {
       path: '/customer',
       redirect: '/customer/home',

@@ -7,6 +7,9 @@
         <p>Create your new account</p>
       </div>
 
+      <div v-if="error" class="error-message">{{ error }}</div>
+      <div v-if="success" class="success-message">{{ success }}</div>
+
       <form @submit.prevent="handleRegister">
         <div class="form-group">
           <label for="username">Username:</label>
@@ -24,7 +27,13 @@
           <label for="confirmPassword">Confirm Password:</label>
           <input type="password" id="confirmPassword" v-model="confirmPassword" required>
         </div>
-        <PrimaryButton text="Register" type="primary" :fullWidth="true" class="mt-20" />
+        <PrimaryButton 
+          :text="loading ? 'Registering...' : 'Register'" 
+          type="primary" 
+          :fullWidth="true" 
+          class="mt-20" 
+          :disabled="loading"
+        />
       </form>
 
       <p class="text-center mt-20">
@@ -36,26 +45,56 @@
 
 <script setup>
 import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
-import PrimaryButton from '../../components/Shared/PrimaryButton.vue'; // Import our new button component
+import { RouterLink, useRouter } from 'vue-router';
+import PrimaryButton from '../../components/Shared/PrimaryButton.vue';
+import axios from 'axios';
 
 const username = ref('');
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+const loading = ref(false);
+const error = ref('');
+const success = ref('');
+const router = useRouter();
 
-const handleRegister = () => {
-  if (password.value!== confirmPassword.value) {
-    alert('Passwords do not match!');
+const handleRegister = async () => {
+  error.value = '';
+  success.value = '';
+
+  if (password.value !== confirmPassword.value) {
+    error.value = 'Passwords do not match!';
     return;
   }
-  console.log('Attempting registration with:', username.value, email.value);
-  alert('Registration attempted. (Not implemented yet)');
-  // Implement your registration logic here
+
+  loading.value = true;
+
+  try {
+    const response = await axios.post('http://localhost:5401/api/auth/register', {
+      username: username.value,
+      email: email.value,
+      password: password.value
+    });
+
+    if (response.data.success) {
+      success.value = 'Registration successful! Redirecting to login...';
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000);
+    }
+  } catch (err) {
+    console.error('Registration error:', err);
+    error.value = err.response?.data?.error || 'Registration failed. Please try again.';
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 
 <style scoped>
+
+.registration-page {
+
 /* Keep existing styles */
 
 .registration-page{
@@ -116,6 +155,27 @@ const handleRegister = () => {
 
 .mt-20 {
   margin-top: 20px;
+}
+
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-align: center;
+  border: 1px solid #ef9a9a;
+}
+
+.success-message {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  text-align: center;
+  border: 1px solid #a5d6a7;
 }
 
 </style>
