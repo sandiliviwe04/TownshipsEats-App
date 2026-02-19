@@ -61,8 +61,8 @@ import Payment from '../payment.vue';
 const router = useRouter();
 
 const cartItems = ref([
-  { id: 1, name: 'Kota Special', restaurant: 'Kasi Flavours', price: 60.00, quantity: 1, image: 'https://via.placeholder.com/50/ff7f00/ffffff?text=Kota' },
-  { id: 2, name: 'Spicy Chicken Wings (6pc)', restaurant: 'Gourmet Grills', price: 95.00, quantity: 2, image: 'https://via.placeholder.com/50/28a745/ffffff?text=Wings' },
+  { id: 1, name: 'Kota Special', restaurant: 'Kasi Flavours', price: 60.00, quantity: 1, image: 'https://loremflickr.com/50/50/sandwich' },
+  { id: 2, name: 'Spicy Chicken Wings (6pc)', restaurant: 'Gourmet Grills', price: 95.00, quantity: 2, image: 'https://loremflickr.com/50/50/chicken_wings' },
 ]);
 
 const deliveryFee = ref(25.00);
@@ -106,6 +106,7 @@ const checkout = () => {
 .cart-page {
   display: flex;
   justify-content: center;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
   padding: 20px;
 }
 

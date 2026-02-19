@@ -3,8 +3,7 @@
   <header class="app-header-component">
     <div class="header-content flex-between">
       <RouterLink to="/" class="logo-link">
-        <!-- Placeholder for your logo -->
-        <!-- <img :src="logo" alt="TownshipsEats Logo" class="app-logo"> -->
+        <img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" alt="TownshipsEats Logo" class="app-logo">
         <h2 style="color: var(--color-primary-orange); margin: 0;">TownshipsEats</h2>
       </RouterLink>
 
@@ -58,50 +57,85 @@ const logout = () => {
 
 <style scoped>
 .app-header-component {
-  background-color: var(--color-text-light);
-  padding: 15px 25px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
+  background: #ffffff;
+  padding: 18px 40px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
 }
 
+/* Center content */
 .header-content {
   max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
+/* Logo */
 .logo-link {
   text-decoration: none;
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
 .app-logo {
-  height: 40px;
-  margin-right: 10px;
+  height: 42px;
+  transition: transform 0.3s ease;
 }
 
+.logo-link:hover .app-logo {
+  transform: scale(1.08);
+}
+
+/* Navigation */
 .main-nav {
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 30px;
 }
 
+/* Nav items */
 .nav-item {
-  font-weight: bold;
-  color: var(--color-grey-text);
+  font-weight: 600;
+  color: #4b5563;
   text-decoration: none;
-  font-size: 1.1em;
-  transition: color 0.3s ease;
+  font-size: 0.95rem;
+  position: relative;
+  transition: all 0.3s ease;
+  padding-bottom: 6px;
+}
+
+/* Smooth underline animation */
+.nav-item::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background-color: var(--color-primary-orange);
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s ease;
 }
 
 .nav-item:hover {
   color: var(--color-primary-orange);
-  text-decoration: none;
+}
+
+.nav-item:hover::after {
+  width: 100%;
 }
 
 .nav-item.router-link-exact-active {
   color: var(--color-primary-orange);
-  border-bottom: 2px solid var(--color-primary-orange);
-  padding-bottom: 5px;
 }
+
+.nav-item.router-link-exact-active::after {
+  width: 100%;
+}  
+
 </style>

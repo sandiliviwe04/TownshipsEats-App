@@ -58,6 +58,7 @@ const avgOrderValue = computed(() => {
 .vendor-reports-page {
   display: flex;
   justify-content: center;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
   padding: 20px;
 }
 

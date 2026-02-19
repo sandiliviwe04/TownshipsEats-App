@@ -107,6 +107,7 @@ onMounted(() => {
 .order-tracking-page {
   display: flex;
   justify-content: center;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
   padding: 20px;
 }
 

@@ -132,6 +132,7 @@ onMounted(() => {
 .vendor-earnings-page {
   display: flex;
   flex-direction: column;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
   min-height: 100vh;
   background-color: var(--color-background-light);
 }

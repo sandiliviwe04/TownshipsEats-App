@@ -67,7 +67,7 @@ const handleClick = (event) => {
 }
 
 .primary-button.btn-danger {
-  background-color: #dc3545; /* Red */
+  background: linear-gradient(135deg, #ec1717, #d7301d);/* Red */
   color: var(--color-text-light);
 }
 

@@ -92,16 +92,44 @@ const handleRegister = async () => {
 </script>
 
 <style scoped>
+
 .registration-page {
+
+/* Keep existing styles */
+
+.registration-page{
+  position: relative;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 120px);
+  padding: 20px;
+  background: linear-gradient(135deg, #dfd1c6, #ff9e16);
+  overflow: hidden;
 }
 
-.registration-card {
-  max-width: 450px;
+.login-page::before {
+  content: "";
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  top: -100px;
+  right: -100px;
+  filter: blur(100px);
 }
+
+
+.registration-card {
+  background-color: rgb(238, 248, 248);
+  width: 100%;
+  max-width: 480px;   /* was 400px */
+  padding: 50px;      /* was 40px */
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
 
 .form-group {
   margin-bottom: 15px;
@@ -122,11 +150,13 @@ const handleRegister = async () => {
   border: 1px solid var(--color-border-light);
   border-radius: 5px;
   font-size: 1em;
+
 }
 
 .mt-20 {
   margin-top: 20px;
 }
+
 
 .error-message {
   background-color: #ffebee;
@@ -147,4 +177,5 @@ const handleRegister = async () => {
   text-align: center;
   border: 1px solid #a5d6a7;
 }
+
 </style>

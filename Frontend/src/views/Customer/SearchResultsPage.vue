@@ -43,11 +43,18 @@ const searched = ref(false);
 
 // Dummy data for simulation
 const allDishes = [
-  { id: 1, name: 'Kota Special', type: 'Traditional', restaurant: 'Kasi Flavours', price: 60.00, rating: 4.5, image: 'https://via.placeholder.com/50/ff7f00/ffffff?text=D1' },
-  { id: 2, name: 'Flame Grilled Chicken', type: 'Grilled', restaurant: 'Nando\'s', price: 90.00, rating: 4.8, image: 'https://via.placeholder.com/50/28a745/ffffff?text=D2' },
-  { id: 3, name: 'Vegetable Curry', type: 'Vegetarian', restaurant: 'Spice Route', price: 85.00, rating: 4.2, image: 'https://via.placeholder.com/50/ff7f00/ffffff?text=D3' },
-  { id: 4, name: 'Boerewors Roll', type: 'Street Food', restaurant: 'Corner Cafe', price: 40.00, rating: 4.0, image: 'https://via.placeholder.com/50/28a745/ffffff?text=D4' },
-  { id: 5, name: 'Malva Pudding', type: 'Dessert', restaurant: 'Sweet Temptations', price: 45.00, rating: 4.7, image: 'https://via.placeholder.com/50/ff7f00/ffffff?text=D5' },
+  { id: 101, name: 'Kota Special', type: 'Traditional', restaurant: 'Kasi Flavours', price: 60.00, rating: 4.5, image: 'https://loremflickr.com/50/50/sandwich,sub?lock=301' },
+  { id: 102, name: 'Mogodu & Pap', type: 'Traditional', restaurant: 'Kasi Flavours', price: 75.00, rating: 4.6, image: 'https://loremflickr.com/50/50/porridge,stew?lock=302' },
+  { id: 103, name: 'Skop', type: 'Traditional', restaurant: 'Kasi Flavours', price: 90.00, rating: 4.4, image: 'https://loremflickr.com/50/50/meat,roasted?lock=303' },
+  { id: 201, name: 'Mixed Grill Platter', type: 'Shisanyama', restaurant: 'Vusi\'s Shisanyama', price: 250.00, rating: 4.9, image: 'https://loremflickr.com/50/50/barbecue,steak?lock=304' },
+  { id: 202, name: 'Quarter Chicken', type: 'Shisanyama', restaurant: 'Vusi\'s Shisanyama', price: 65.00, rating: 4.7, image: 'https://loremflickr.com/50/50/chicken,fries?lock=305' },
+  { id: 301, name: 'Cheese Burger', type: 'Burgers', restaurant: 'Gourmet Grills', price: 85.00, rating: 4.8, image: 'https://loremflickr.com/50/50/burger,cheese?lock=307' },
+  { id: 302, name: 'Ribs Platter', type: 'BBQ', restaurant: 'Gourmet Grills', price: 150.00, rating: 4.9, image: 'https://loremflickr.com/50/50/ribs,bbq?lock=308' },
+  { id: 401, name: 'Hardbody Chicken', type: 'Home Cooked', restaurant: 'Mama Nandi\'s Kitchen', price: 85.00, rating: 4.8, image: 'https://loremflickr.com/50/50/chicken,stew?lock=310' },
+  { id: 402, name: 'Dombolo & Stew', type: 'Home Cooked', restaurant: 'Mama Nandi\'s Kitchen', price: 80.00, rating: 4.7, image: 'https://loremflickr.com/50/50/dumplings,stew?lock=311' },
+  { id: 501, name: 'The Boss Kota', type: 'Street Food', restaurant: 'Kasi King Kotas', price: 95.00, rating: 4.8, image: 'https://loremflickr.com/50/50/sandwich,huge?lock=313' },
+  { id: 503, name: 'Russian & Chips', type: 'Street Food', restaurant: 'Kasi King Kotas', price: 45.00, rating: 4.3, image: 'https://loremflickr.com/50/50/hotdog,fries?lock=315' },
+  { id: 601, name: 'Meaty Supreme Pizza', type: 'Italian', restaurant: 'Pizza Zone', price: 130.00, rating: 4.5, image: 'https://loremflickr.com/50/50/pizza,meat?lock=316' },
 ];
 
 const performSearch = () => {
@@ -77,6 +84,7 @@ const addToCart = (itemId) => {
 .search-results-page {
   display: flex;
   justify-content: center;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
   padding: 20px;
 }
 

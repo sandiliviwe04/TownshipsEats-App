@@ -29,9 +29,9 @@ import { ref } from 'vue';
 import PrimaryButton from '../../components/Shared/PrimaryButton.vue'; // Import PrimaryButton
 
 const favoriteItems = ref([
-  { id: 1, name: 'Spicy Chakalaka Burger', restaurant: 'Ghetto Burgers', price: 75.00, image: 'https://via.placeholder.com/50/ff7f00/ffffff?text=F1' },
-  { id: 2, name: 'Kota Deluxe', restaurant: 'Mama Thandi\'s Kitchen', price: 50.00, image: 'https://via.placeholder.com/50/28a745/ffffff?text=F2' },
-  { id: 3, name: 'Vetkoek & Mince', restaurant: 'Kasi Flavours', price: 35.00, image: 'https://via.placeholder.com/50/ff7f00/ffffff?text=F3' },
+  { id: 1, name: 'Spicy Chakalaka Burger', restaurant: 'Ghetto Burgers', price: 75.00, image: 'https://loremflickr.com/50/50/burger' },
+  { id: 2, name: 'Kota Deluxe', restaurant: 'Mama Thandi\'s Kitchen', price: 50.00, image: 'https://loremflickr.com/50/50/sandwich' },
+  { id: 3, name: 'Vetkoek & Mince', restaurant: 'Kasi Flavours', price: 35.00, image: 'https://loremflickr.com/50/50/curry' },
 ]);
 
 const removeItem = (itemId) => {
@@ -45,6 +45,7 @@ const removeItem = (itemId) => {
 .favorites-page {
   display: flex;
   justify-content: center;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
   padding: 20px;
 }
 

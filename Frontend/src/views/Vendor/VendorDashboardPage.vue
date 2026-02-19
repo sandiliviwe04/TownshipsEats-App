@@ -55,6 +55,7 @@ const goToReports = () => {
   display: flex;
   justify-content: center;
   padding: 20px;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
 }
 
 .dashboard-card {
