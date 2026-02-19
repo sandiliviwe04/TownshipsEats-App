@@ -1,4 +1,3 @@
-<!-- Frontend/src/views/Customer/CategoryPage.vue -->
 <template>
   <div class="category-page">
     <div class="page-card category-card">
@@ -6,11 +5,16 @@
       <p class="text-center mb-20">Find your next delicious meal by browsing our curated categories.</p>
 
       <div class="category-grid">
-        <div v-for="category in categories" :key="category.id" class="category-item">
-          <img :src="category.image" :alt="category.name" class="category-image">
-          <h3>{{ category.name }}</h3>
-          <p>{{ category.description }}</p>
-          <PrimaryButton text="View Dishes" @click="viewCategory(category.id)" />
+        <div 
+          v-for="category in categories" 
+          :key="category.id" 
+          class="category-tile" 
+          @click="viewCategory(category.id)"
+          :style="{ backgroundImage: `url(${category.image})` }"
+        >
+          <div class="category-overlay">
+            <h3>{{ category.name }}</h3>
+          </div>
         </div>
       </div>
     </div>
@@ -19,75 +23,83 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router'; // Import useRouter
-import PrimaryButton from '../../components/Shared/PrimaryButton.vue';
+import { useRouter } from 'vue-router';
 
-const router = useRouter(); // Initialize router
+const router = useRouter();
 
 const categories = ref([
-  { id: 1, name: 'Burgers', description: 'Classic and gourmet burgers.', image: 'https://via.placeholder.com/150/ff7f00/ffffff?text=Burgers' },
-  { id: 2, name: 'Pizza', description: 'Freshly baked pizzas.', image: 'https://via.placeholder.com/150/28a745/ffffff?text=Pizza' },
-  { id: 3, name: 'Traditional', description: 'Local and authentic dishes.', image: 'https://via.placeholder.com/150/ff7f00/ffffff?text=Traditional' },
-  { id: 4, name: 'Desserts', description: 'Sweet treats for everyone.', image: 'https://via.placeholder.com/150/28a745/ffffff?text=Desserts' },
-  { id: 5, name: 'Drinks', description: 'Refreshing beverages.', image: 'https://via.placeholder.com/150/ff7f00/ffffff?text=Drinks' },
-  { id: 6, name: 'Vegetarian', description: 'Healthy and delicious vegetarian options.', image: 'https://via.placeholder.com/150/28a745/ffffff?text=Veg' },
+  { id: 1, name: 'Shisanyama', image: 'https://loremflickr.com/400/300/braai,meat?lock=1' },
+  { id: 2, name: 'Kotas', image: 'https://loremflickr.com/400/300/sandwich,sub?lock=2' },
+  { id: 3, name: 'Mogodu', image: 'https://loremflickr.com/400/300/stew,curry?lock=3' },
+  { id: 4, name: 'Street Food', image: 'https://loremflickr.com/400/300/streetfood,fried?lock=4' },
+  { id: 5, name: 'Burgers', image: 'https://loremflickr.com/400/300/burger,gourmet?lock=5' },
+  { id: 6, name: 'Pizza', image: 'https://loremflickr.com/400/300/pizza,sourdough?lock=6' },
+  { id: 7, name: 'Chicken', image: 'https://loremflickr.com/400/300/roastedchicken?lock=7' },
+  { id: 8, name: 'Bakery', image: 'https://loremflickr.com/400/300/bakery,pastry?lock=8' },
+  { id: 9, name: 'Drinks', image: 'https://loremflickr.com/400/300/drink,cocktail?lock=9' },
+  { id: 10, name: 'Desserts', image: 'https://loremflickr.com/400/300/dessert,cake?lock=10' },
+  { id: 11, name: 'Vegetarian', image: 'https://loremflickr.com/400/300/salad,bowl?lock=11' },
 ]);
 
 const viewCategory = (categoryId) => {
-  router.push({ name: 'CategoryDishes', params: { id: categoryId } }); // Navigate to the new page
+  router.push({ name: 'CategoryDishes', params: { id: categoryId } });
 };
 </script>
 
 <style scoped>
-/* (No changes to existing styles) */
 .category-page {
   display: flex;
   justify-content: center;
   padding: 20px;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
 }
 
 .category-card {
-  max-width: 1000px;
+  max-width: 1200px;
+  width: 100%;
 }
 
 .category-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
   margin-top: 30px;
 }
 
-.category-item {
-  background-color: var(--color-background-light);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  padding: 20px;
-  text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.category-tile {
+  position: relative;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.category-item:hover {
+.category-tile:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.2);
 }
 
-.category-image {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
-  margin-bottom: 15px;
-  border: 3px solid var(--color-primary-orange);
+.category-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  padding: 20px 15px 15px;
+  display: flex;
+  align-items: flex-end;
+  height: 50%;
 }
 
-.category-item h3 {
-  color: var(--color-text-dark);
-  margin-bottom: 10px;
-}
-
-.category-item p {
-  color: var(--color-grey-text);
-  font-size: 0.9em;
-  margin-bottom: 15px;
+.category-overlay h3 {
+  color: white;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 </style>

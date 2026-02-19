@@ -20,7 +20,7 @@
         </div>
         <div class="form-group">
           <label for="dishImage">Image URL:</label>
-          <input type="url" id="dishImage" v-model="dish.image" placeholder="e.g., https://via.placeholder.com/90">
+          <input type="url" id="dishImage" v-model="dish.image" placeholder="e.g., https://loremflickr.com/320/240/food">
         </div>
         <div class="form-group">
           <label for="dishCategory">Category:</label>
@@ -63,9 +63,9 @@ const dish = ref({
 
 // Dummy menu items for editing simulation
 const dummyMenuItems = [
-  { id: 1, name: 'Kota Special', description: 'Classic Kota with all the trimmings.', price: 60.00, image: 'https://via.placeholder.com/50/ff7f00/ffffff?text=D1', category: 'Traditional' },
-  { id: 2, name: 'Mogodu & Pap', description: 'Traditional tripe and pap.', price: 75.00, image: 'https://via.placeholder.com/50/28a745/ffffff?text=D2', category: 'Traditional' },
-  { id: 3, name: 'Boerewors Roll', description: 'Grilled boerewors in a bun.', price: 40.00, image: 'https://via.placeholder.com/50/ff7f00/ffffff?text=D3', category: 'Burgers' },
+  { id: 1, name: 'Kota Special', description: 'Classic Kota with all the trimmings.', price: 60.00, image: 'https://loremflickr.com/50/50/sandwich', category: 'Traditional' },
+  { id: 2, name: 'Mogodu & Pap', description: 'Traditional tripe and pap.', price: 75.00, image: 'https://loremflickr.com/50/50/porridge', category: 'Traditional' },
+  { id: 3, name: 'Boerewors Roll', description: 'Grilled boerewors in a bun.', price: 40.00, image: 'https://loremflickr.com/50/50/hotdog', category: 'Burgers' },
 ];
 
 onMounted(() => {
@@ -98,6 +98,7 @@ const handleSubmit = () => {
 .dish-form-page {
   display: flex;
   justify-content: center;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
   padding: 20px;
 }
 

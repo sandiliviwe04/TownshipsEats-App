@@ -59,6 +59,7 @@ const acceptDelivery = (deliveryId) => {
 /* Keep existing styles */
 .driver-dashboard-page {
   display: flex;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
   justify-content: center;
   padding: 20px;
 }

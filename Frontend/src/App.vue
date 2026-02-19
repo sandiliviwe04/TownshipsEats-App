@@ -61,8 +61,10 @@ window.loginAs = (role) => {
   flex-direction: column;
 }
 
+
 .app-content {
   flex-grow: 1;
   padding: 0 20px;
 }
+
 </style>

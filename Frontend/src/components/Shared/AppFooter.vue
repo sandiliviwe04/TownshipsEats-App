@@ -21,11 +21,23 @@ const currentYear = ref(new Date().getFullYear());
 
 <style scoped>
 .app-footer {
-  background-color: var(--color-text-dark); /* Dark background for footer */
-  color: var(--color-text-light);
-  padding: 20px 25px;
-  margin-top: 30px;
-  box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+  position: relative;
+  background: linear-gradient(135deg, #28817c, #2c2c2c);
+  color: #f5f5f5;
+  padding: 35px 25px;
+  margin-top: 40px;
+  overflow: hidden;
+}
+
+/* Soft glowing top border */
+.app-footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #d5bdac, #a48a65);
 }
 
 .footer-content {
@@ -34,29 +46,50 @@ const currentYear = ref(new Date().getFullYear());
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 18px;
   text-align: center;
 }
 
 .app-footer p {
   margin: 0;
-  font-size: 0.9em;
+  font-size: 0.95em;
+  opacity: 0.8;
+  letter-spacing: 0.5px;
 }
 
 .footer-nav {
   display: flex;
-  gap: 20px;
+  gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .footer-link {
-  color: var(--color-text-light);
+  color: #f5f5f5;
   text-decoration: none;
-  font-size: 0.9em;
-  transition: color 0.3s ease;
+  font-size: 0.95em;
+  font-weight: 500;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Smooth underline animation */
+.footer-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #ffbb8a;
+  transition: width 0.3s ease;
 }
 
 .footer-link:hover {
-  color: var(--color-primary-orange);
-  text-decoration: underline;
+  color: #ffb347;
+}
+
+.footer-link:hover::after {
+  width: 100%;
 }
 </style>

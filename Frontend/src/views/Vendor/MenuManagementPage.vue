@@ -37,9 +37,9 @@ import PrimaryButton from '../../components/Shared/PrimaryButton.vue';
 const router = useRouter(); // Initialize router
 
 const menuDishes = ref([
-  { id: 1, name: 'Kota Special', description: 'Classic Kota with all the trimmings.', price: 60.00, image: 'https://via.placeholder.com/50/ff7f00/ffffff?text=D1' },
-  { id: 2, name: 'Mogodu & Pap', description: 'Traditional tripe and pap.', price: 75.00, image: 'https://via.placeholder.com/50/28a745/ffffff?text=D2' },
-  { id: 3, name: 'Boerewors Roll', description: 'Grilled boerewors in a bun.', price: 40.00, image: 'https://via.placeholder.com/50/ff7f00/ffffff?text=D3' },
+  { id: 1, name: 'Kota Special', description: 'Classic Kota with all the trimmings.', price: 60.00, image: 'https://loremflickr.com/50/50/sandwich' },
+  { id: 2, name: 'Mogodu & Pap', description: 'Traditional tripe and pap.', price: 75.00, image: 'https://loremflickr.com/50/50/porridge' },
+  { id: 3, name: 'Boerewors Roll', description: 'Grilled boerewors in a bun.', price: 40.00, image: 'https://loremflickr.com/50/50/hotdog' },
 ]);
 
 const goToAddDish = () => {
@@ -64,6 +64,7 @@ const deleteDish = (dishId) => {
 .menu-management-page {
   display: flex;
   justify-content: center;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
   padding: 20px;
 }
 

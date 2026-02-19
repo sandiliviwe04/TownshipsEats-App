@@ -5,7 +5,7 @@
     <main class="main-content container">
       <div class="profile-header flex-center-column mb-4">
         <div class="profile-avatar mb-2">
-          <img src="https://via.placeholder.com/100/447EEF/FFFFFF?text=🚗" alt="Driver Avatar" class="avatar-image" />
+          <img src="https://loremflickr.com/100/100/car" alt="Driver Avatar" class="avatar-image" />
         </div>
         <h1 class="profile-name">{{ driver.name }}</h1>
         <p class="profile-email">{{ driver.email }}</p>
@@ -65,7 +65,7 @@ const driver = ref({
   email: 'sipho.dlamini@townshipseats.com',
   phone: '+27 72 987 6543',
   idNumber: '9001015000087',
-  avatar: 'https://via.placeholder.com/100/447EEF/FFFFFF?text=🚗',
+  avatar: 'https://loremflickr.com/100/100/car',
   vehicle: {
     makeModel: 'Toyota Corolla',
     licensePlate: 'CA 123-456',
@@ -83,6 +83,7 @@ const logout = () => {
 <style scoped>
 .driver-profile-page {
   display: flex;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
   flex-direction: column;
   min-height: 100vh;
   background-color: var(--color-background-light);

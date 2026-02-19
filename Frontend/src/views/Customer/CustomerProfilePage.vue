@@ -35,10 +35,10 @@ import { ref } from 'vue';
 import PrimaryButton from '../../components/Shared/PrimaryButton.vue'; // Import PrimaryButton
 
 const userProfile = ref({
-  name: 'John Doe',
-  email: 'john.doe@example.com',
+  name: 'Khangelani Mhlakane',
+  email: 'khangelani.mhlakane@example.com',
   phone: '+27 71 123 4567',
-  address: '123 Main Street, Soweto, Johannesburg',
+  address: '254 Fernandez Street, Samora, Cape Town, South Africa',
 });
 
 const editProfile = () => {
@@ -52,6 +52,7 @@ const editProfile = () => {
 .profile-page {
   display: flex;
   justify-content: center;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
   padding: 20px;
 }
 
