@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/auth", authRoutes)
 app.use("/api", paymentRoutes);
+app.use("/api", contactRoutes);
 
 // Basic route
 app.get("/", (req, res) => {

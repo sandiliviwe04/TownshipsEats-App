@@ -7,57 +7,116 @@
         We'd love to hear from you! Reach out with any questions, feedback, or support needs.
       </p>
 
+      <div v-if="success" class="success-message">{{ success }}</div>
+      <div v-if="error" class="error-message">{{ error }}</div>
+
+      <!-- Debug: Show current user -->
+      <div v-if="currentUser" class="debug-info">
+        Logged in as: {{ currentUser.username }} ({{ currentUser.role }})
+      </div>
+      <div v-else class="debug-info">
+        Not logged in (Guest)
+      </div>
+
       <form @submit.prevent="submitForm" class="contact-form">
+        <!-- Contact Type Selection -->
+        <div class="form-group">
+          <label for="contactType">I want to contact:</label>
+          <select id="contactType" v-model="form.contactType" required>
+            <option value="">Select who to contact</option>
+            <option value="vendor">A Vendor</option>
+            <option value="driver">A Driver</option>
+            <option value="support">Customer Support</option>
+          </select>
+        </div>
+
         <div class="form-group">
           <label for="name">Your Name:</label>
-          <input type="text" id="name" v-model="form.name" required>
+          <input type="text" id="name" v-model="form.customerName" required>
         </div>
+        
         <div class="form-group">
           <label for="email">Your Email:</label>
-          <input type="email" id="email" v-model="form.email" required>
+          <input type="email" id="email" v-model="form.customerEmail" required>
         </div>
+        
         <div class="form-group">
           <label for="subject">Subject:</label>
           <input type="text" id="subject" v-model="form.subject" required>
         </div>
+        
         <div class="form-group">
           <label for="message">Message:</label>
           <textarea id="message" v-model="form.message" rows="6" required></textarea>
         </div>
-        <PrimaryButton text="Send Message" type="primary" :fullWidth="true" class="mt-20" />
-      </form>
 
-      <div class="contact-info text-center mt-40">
-        <h3>Other Ways to Connect</h3>
-        <p><strong>Email:</strong> support@townshipeats.co.za</p>
-        <p><strong>Phone:</strong> +27 10 123 4567</p>
-        <p><strong>Office Hours:</strong> Mon-Fri, 9:00 AM - 5:00 PM SAST</p>
-      </div>
+        <button type="submit" class="submit-btn" :disabled="loading">
+          {{ loading ? 'Sending...' : 'Send Message' }}
+        </button>
+      </form>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import PrimaryButton from '../../components/Shared/PrimaryButton.vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { useAuthStore } from '../../stores/auth.js';
+
+const authStore = useAuthStore();
+const currentUser = authStore.user;
 
 const form = ref({
-  name: '',
-  email: '',
+  customerName: currentUser?.username || '',
+  customerEmail: currentUser?.email || '',
   subject: '',
   message: '',
+  contactType: '',
+  senderRole: currentUser?.role || 'guest',
+  senderId: currentUser?.id || null
 });
 
-const submitForm = () => {
-  alert('Thank you for your message! We will get back to you shortly. (Form submission not implemented yet)');
-  console.log('Contact form submitted:', form.value);
-  // In a real application, you would send this data to a backend API
-  form.value = { // Clear form
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  };
+const loading = ref(false);
+const success = ref('');
+const error = ref('');
+
+// Pre-fill form with user data
+onMounted(() => {
+  if (currentUser) {
+    form.value.customerName = currentUser.username;
+    form.value.customerEmail = currentUser.email;
+    form.value.senderId = currentUser.id;
+    form.value.senderRole = currentUser.role;
+  }
+});
+
+const submitForm = async () => {
+  loading.value = true;
+  success.value = '';
+  error.value = '';
+
+  try {
+    const response = await axios.post('http://localhost:5401/api/contact', {
+      senderId: form.value.senderId,
+      senderRole: form.value.senderRole,
+      senderName: form.value.customerName,
+      senderEmail: form.value.customerEmail,
+      receiverType: form.value.contactType || 'support',
+      subject: form.value.subject,
+      message: form.value.message
+    });
+    
+    if (response.data.success) {
+      success.value = 'Message sent successfully!';
+      form.value.subject = '';
+      form.value.message = '';
+      form.value.contactType = '';
+    }
+  } catch (err) {
+    error.value = err.response?.data?.error || 'Failed to send message';
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 
@@ -65,66 +124,95 @@ const submitForm = () => {
 .contact-page {
   display: flex;
   justify-content: center;
-  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
+  align-items: center;
+  min-height: calc(100vh - 120px);
   padding: 20px;
+  background: linear-gradient(135deg, #fff5ec, #ffe8d6);
 }
 
 .contact-card {
   max-width: 600px;
   width: 100%;
-  text-align: left;
-}
-
-.intro-text {
-  font-size: 1.1em;
-  color: var(--color-grey-text);
-}
-
-.contact-form {
-  margin-top: 30px;
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
-  color: var(--color-text-dark);
+  color: #333;
 }
 
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group textarea {
-  width: calc(100% - 22px); /* Account for padding and border */
-  padding: 10px;
-  border: 1px solid var(--color-border-light);
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 1em;
-  background-color: var(--color-background-light);
-  color: var(--color-text-dark);
+  box-sizing: border-box;
 }
 
 .form-group textarea {
-  resize: vertical; /* Allow vertical resizing */
+  resize: vertical;
+  min-height: 120px;
 }
 
-.contact-info {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px dashed var(--color-border-light);
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #ff6b35;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.contact-info h3 {
-  color: var(--color-primary-orange);
-  margin-bottom: 15px;
-  font-size: 1.3em;
+.submit-btn:hover:not(:disabled) {
+  background-color: #ff5722;
 }
 
-.contact-info p {
-  margin-bottom: 8px;
-  color: var(--color-grey-text);
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border: 1px solid #ef9a9a;
+}
+
+.success-message {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border: 1px solid #a5d6a7;
+}
+
+.debug-info {
+  background-color: #e3f2fd;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border: 1px solid #90caf9;
+  color: #1976d2;
 }
 </style>

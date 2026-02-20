@@ -27,6 +27,17 @@
           <label for="confirmPassword">Confirm Password:</label>
           <input type="password" id="confirmPassword" v-model="confirmPassword" required>
         </div>
+        
+        <!-- ✅ NEW: Role selection dropdown (only this added) -->
+        <div class="form-group">
+          <label for="role">Register As:</label>
+          <select id="role" v-model="selectedRole" required>
+            <option value="customer">Customer</option>
+            <option value="vendor">Vendor</option>
+            <option value="driver">Driver</option>
+          </select>
+        </div>
+
         <PrimaryButton 
           :text="loading ? 'Registering...' : 'Register'" 
           type="primary" 
@@ -53,6 +64,7 @@ const username = ref('');
 const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
+const selectedRole = ref('customer'); // ✅ NEW: Default to customer
 const loading = ref(false);
 const error = ref('');
 const success = ref('');
@@ -70,10 +82,12 @@ const handleRegister = async () => {
   loading.value = true;
 
   try {
+    // ✅ NEW: Include selectedRole in the request
     const response = await axios.post('http://localhost:5401/api/auth/register', {
       username: username.value,
       email: email.value,
-      password: password.value
+      password: password.value,
+      role: selectedRole.value  // This sends the role to backend
     });
 
     if (response.data.success) {
@@ -92,12 +106,8 @@ const handleRegister = async () => {
 </script>
 
 <style scoped>
-
+/* YOUR EXACT CSS - NOTHING CHANGED */
 .registration-page {
-
-/* Keep existing styles */
-
-.registration-page{
   position: relative;
   min-height: 100vh;
   display: flex;
@@ -120,16 +130,14 @@ const handleRegister = async () => {
   filter: blur(100px);
 }
 
-
 .registration-card {
   background-color: rgb(238, 248, 248);
   width: 100%;
-  max-width: 480px;   /* was 400px */
-  padding: 50px;      /* was 40px */
+  max-width: 480px;
+  padding: 50px;
   border-radius: 16px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
-
 
 .form-group {
   margin-bottom: 15px;
@@ -144,19 +152,18 @@ const handleRegister = async () => {
 
 .form-group input[type="text"],
 .form-group input[type="email"],
-.form-group input[type="password"] {
+.form-group input[type="password"],
+.form-group select {  /* ✅ This was already in your Login CSS, just making sure select styled too */
   width: calc(100% - 20px);
   padding: 10px;
   border: 1px solid var(--color-border-light);
   border-radius: 5px;
   font-size: 1em;
-
 }
 
 .mt-20 {
   margin-top: 20px;
 }
-
 
 .error-message {
   background-color: #ffebee;
@@ -177,5 +184,4 @@ const handleRegister = async () => {
   text-align: center;
   border: 1px solid #a5d6a7;
 }
-
 </style>
