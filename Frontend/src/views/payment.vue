@@ -2,44 +2,106 @@
   <div class="payment-container">
     <h1>Checkout</h1>
     
-    <div v-if="success" class="success">{{ success }}</div>
-    <div v-if="error" class="error">{{ error }}</div>
-    <div v-if="debugInfo" class="debug">{{ debugInfo }}</div>
-
-    <!-- Hidden form that will be submitted -->
-    <form ref="payfastForm" method="POST" :action="payfastUrl" style="display: none;">
-      <input v-for="(value, key) in payfastData" 
-             :key="key" 
-             type="hidden" 
-             :name="key" 
-             :value="value" />
-    </form>
-
-    <button v-if="!success && !submitting" @click="createPayment" :disabled="loading">
-      {{ loading ? "Processing..." : "Pay with PayFast" }}
-    </button>
+    <div v-if="loading" class="text-center">
+      <p>Loading your cart...</p>
+    </div>
     
-    <div v-if="submitting" class="info">
-      Redirecting to PayFast secure payment page...
+    <div v-else>
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div v-if="!cart.items || cart.items.length === 0" class="text-center">
+          <p>Your cart is empty. <RouterLink to="/customer/home">Go back shopping</RouterLink></p>
+        </div>
+        <div v-else>
+          <div v-for="item in cart.items" :key="item.id" class="summary-item">
+            <span>{{ item.name }} x{{ item.quantity }}</span>
+            <span>R{{ (Number(item.unit_price) * Number(item.quantity)).toFixed(2) }}</span>
+          </div>
+          <div class="summary-line">
+            <span>Subtotal:</span>
+            <span>R{{ Number(cart.subtotal || 0).toFixed(2) }}</span>
+          </div>
+          <div class="summary-line">
+            <span>Delivery Fee:</span>
+            <span>R{{ Number(cart.delivery_fee || 25.00).toFixed(2) }}</span>
+          </div>
+          <div class="summary-total">
+            <strong>Total: R{{ calculateTotal().toFixed(2) }}</strong>
+          </div>
+        </div>
+      </div>
+      
+      <div v-if="success" class="success">{{ success }}</div>
+      <div v-if="error" class="error">{{ error }}</div>
+      <div v-if="debugInfo" class="debug">{{ debugInfo }}</div>
+
+      <!-- Hidden form that will be submitted -->
+      <form ref="payfastForm" method="POST" :action="payfastUrl" style="display: none;">
+        <input v-for="(value, key) in payfastData" 
+               :key="key" 
+               type="hidden" 
+               :name="key" 
+               :value="value" />
+      </form>
+
+      <button v-if="cart.items && cart.items.length > 0 && !success && !submitting" @click="createPayment" :disabled="loading">
+        {{ loading ? "Processing..." : `Pay R${calculateTotal().toFixed(2)} with PayFast` }}
+      </button>
+      
+      <div v-if="submitting" class="info">
+        Redirecting to PayFast secure payment page...
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import { RouterLink } from 'vue-router';
+
 export default {
   name: "PaymentPage",
   data() {
     return {
-      loading: false,
+      loading: true,
       submitting: false,
       success: null,
       error: null,
       debugInfo: null,
       payfastUrl: null,
-      payfastData: null
+      payfastData: null,
+      cart: { items: [], subtotal: 0, delivery_fee: 25.00, total: 0 }
     };
   },
+  async created() {
+    await this.fetchCart();
+  },
   methods: {
+    async fetchCart() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:5401/api/cart', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (response.data.success) {
+          this.cart = response.data.data;
+          console.log('Cart loaded:', this.cart);
+        }
+      } catch (err) {
+        console.error('Error fetching cart:', err);
+        this.error = 'Failed to load cart';
+      } finally {
+        this.loading = false;
+      }
+    },
+    
+    calculateTotal() {
+      const subtotal = Number(this.cart.subtotal || 0);
+      const deliveryFee = Number(this.cart.delivery_fee || 25.00);
+      return subtotal + deliveryFee;
+    },
+    
     async createPayment() {
       this.loading = true;
       this.error = null;
@@ -49,19 +111,25 @@ export default {
       this.payfastData = null;
 
       try {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        
+        const totalAmount = this.calculateTotal().toFixed(2);
+        
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/payfast/pay`, {
           method: "POST",
           headers: { 
             "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": "true" // ADD THIS HEADER
+            "Authorization": `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true"
           },
           body: JSON.stringify({
-            first_name: "imaan",
-            last_name: "cummings",
-            email: "imaan@gmail.com",
-            amount: "100.00",
-            item_name: "Test Meal",
-            item_description: "Sample description",
+            first_name: user.username || "Customer",
+            last_name: "",
+            email: user.email || "customer@example.com",
+            amount: totalAmount,
+            item_name: `Order from ${this.cart.vendor_name || 'TownshipsEats'}`,
+            item_description: `${this.cart.items?.length || 0} items`,
             order_id: `order-${Date.now()}`
           }),
         });
@@ -76,17 +144,11 @@ export default {
         this.debugInfo = `Response received: ${JSON.stringify(data)}`;
 
         if (data.success && data.url && data.data) {
-          this.success = "Payment initialized! Redirecting to PayFast...";
+          this.success = `Payment of R${totalAmount} initialized! Redirecting to PayFast...`;
           
-          // Store the URL and data
           this.payfastUrl = data.url;
           this.payfastData = data.data;
 
-          console.log('🔥 Form action (URL):', this.payfastUrl);
-          console.log('🔥 Form data being submitted:', this.payfastData);
-          console.log('🔥 Full payment object:', JSON.stringify(this.payfastData, null, 2));
-          console.log('🔥 Form action (URL):', this.payfastUrl);
-          // Submit the form after a brief delay
           setTimeout(() => {
             this.submitting = true;
             this.$refs.payfastForm.submit();
@@ -107,6 +169,7 @@ export default {
 </script>
 
 <style scoped>
+/* Keep your existing CSS exactly the same */
 .payment-container {
   max-width: 500px;
   margin: 50px auto;
@@ -121,6 +184,36 @@ export default {
 h1 {
   color: #333;
   margin-bottom: 30px;
+}
+
+.order-summary {
+  text-align: left;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.summary-total {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #ddd;
+  text-align: right;
+  font-size: 1.2em;
 }
 
 button {
@@ -185,5 +278,9 @@ button:disabled {
   border: 1px solid #ddd;
   max-height: 200px;
   overflow: auto;
+}
+
+.text-center {
+  text-align: center;
 }
 </style>
