@@ -141,7 +141,7 @@ export default {
           email: user.email,
           amount: orderTotal,
           item_name: `Order #${orderId}`,
-          item_description: `TownshipsEats order ${orderId}`,
+          item_description: `Kasi Eats order ${orderId}`,
           order_id: orderId
         });
 
@@ -257,3 +257,4 @@ button:disabled {
   text-align: center;
 }
 </style>
+
